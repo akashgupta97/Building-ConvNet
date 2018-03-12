@@ -94,3 +94,26 @@ b = np.random.randn(1, 1, 1)
 
 Z = conv_single_step(a_slice_prev, W, b)
 print("Z =", Z)
+
+def conv_forward(A_prev, W, b, hparameters):
+    """
+    Implements the forward propagation for a convolution function
+
+    Arguments:
+    A_prev -- output activations of the previous layer, numpy array of shape (m, n_H_prev, n_W_prev, n_C_prev)
+    W -- Weights, numpy array of shape (f, f, n_C_prev, n_C)
+    b -- Biases, numpy array of shape (1, 1, 1, n_C)
+    hparameters -- python dictionary containing "stride" and "pad"
+
+    Returns:
+    Z -- conv output, numpy array of shape (m, n_H, n_W, n_C)
+    cache -- cache of values needed for the conv_backward() function
+    """
+
+    ### START CODE HERE ###
+    # Retrieve dimensions from A_prev's shape (≈1 line)
+    (m, n_H_prev, n_W_prev, n_C_prev) = A_prev.shape
+
+    # Retrieve dimensions from W's shape (≈1 line)
+    (f, f, n_C_prev, n_C) = W.shape
+
