@@ -116,4 +116,24 @@ def conv_forward(A_prev, W, b, hparameters):
 
     # Retrieve dimensions from W's shape (≈1 line)
     (f, f, n_C_prev, n_C) = W.shape
+    # Retrieve information from "hparameters" (≈2 lines)
+    stride = hparameters['stride']
+    pad = hparameters['pad']
+
+    # Compute the dimensions of the CONV output volume using the formula given above. Hint: use int() to floor. (≈2 lines)
+    n_H = int((n_H_prev - f + 2 * pad) / stride) + 1
+    n_W = int((n_W_prev - f + 2 * pad) / stride) + 1
+
+    # Initialize the output volume Z with zeros. (≈1 line)
+    Z = np.zeros((m, n_H, n_W, n_C))
+
+    # Create A_prev_pad by padding A_prev
+    A_prev_pad = zero_pad(A_prev, pad)
+
+    for i in range(m):  # loop over the batch of training examples
+        a_prev_pad = A_prev_pad[i]  # Select ith training example's padded activation
+        for h in range(n_W):  # loop over vertical axis of the output volume
+            for w in range(n_H):  # loop over horizontal axis of the output volume
+                for c in range(n_C):  # loop over channels (= #filters) of the output volume
+
 
