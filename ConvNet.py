@@ -136,4 +136,26 @@ def conv_forward(A_prev, W, b, hparameters):
             for w in range(n_H):  # loop over horizontal axis of the output volume
                 for c in range(n_C):  # loop over channels (= #filters) of the output volume
 
+                    # Find the corners of the current "slice" (≈4 lines)
+                    vert_start = h
+                    vert_end = h + f
+                    horiz_start = w
+                    horiz_end = w + f
+
+                    # Use the corners to define the (3D) slice of a_prev_pad (See Hint above the cell). (≈1 line)
+                    a_slice_prev = a_prev_pad[vert_start:vert_end, horiz_start:horiz_end, :]
+
+                    # Convolve the (3D) slice with the correct filter W and bias b, to get back one output neuron. (≈1 line)
+                    Z[i, h, w, c] = conv_single_step(a_slice_prev, W[:, :, :, c], b[:, :, :, c])
+
+                    ### END CODE HERE ###
+
+                    # Making sure your output shape is correct
+                assert (Z.shape == (m, n_H, n_W, n_C))
+
+                # Save information in "cache" for the backprop
+                cache = (A_prev, W, b, hparameters)
+
+                return Z, cache
+
 
