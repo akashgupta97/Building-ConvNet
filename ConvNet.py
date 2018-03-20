@@ -159,3 +159,16 @@ def conv_forward(A_prev, W, b, hparameters):
                 return Z, cache
 
 
+# In[57]:
+
+np.random.seed(1)
+A_prev = np.random.randn(10, 4, 4, 3)
+W = np.random.randn(2, 2, 3, 8)
+b = np.random.randn(1, 1, 1, 8)
+hparameters = {"pad": 2,
+               "stride": 1}
+
+Z, cache_conv = conv_forward(A_prev, W, b, hparameters)
+print("Z's mean =", np.mean(Z))
+print("cache_conv[0][1][2][3] =", cache_conv[0][1][2][3])
+
