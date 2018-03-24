@@ -232,3 +232,47 @@ def pool_forward(A_prev, hparameters, mode="max"):
 
     return A, cache
 
+np.random.seed(1)
+A_prev = np.random.randn(2, 4, 4, 3)
+hparameters = {"stride": 1, "f": 4}
+
+A, cache = pool_forward(A_prev, hparameters)
+print("mode = max")
+print("A =", A)
+print()
+A, cache = pool_forward(A_prev, hparameters, mode="average")
+print("mode = average")
+print("A =", A)
+
+
+# **Expected Output:**
+# <table>
+#
+#     <tr>
+#     <td>
+#     A  =
+#     </td>
+#         <td>
+#          [[[[ 1.74481176  1.6924546   2.10025514]]] <br/>
+#
+#
+#  [[[ 1.19891788  1.51981682  2.18557541]]]]
+#
+#         </td>
+#     </tr>
+#     <tr>
+#     <td>
+#     A  =
+#     </td>
+#         <td>
+#          [[[[-0.09498456  0.11180064 -0.14263511]]] <br/>
+#
+#
+#  [[[-0.09525108  0.28325018  0.33035185]]]]
+#
+#         </td>
+#     </tr>
+#
+# </table>
+#
+
