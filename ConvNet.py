@@ -275,4 +275,49 @@ print("A =", A)
 #
 # </table>
 #
+def conv_backward(dZ, cache):
+    """
+    Implement the backward propagation for a convolution function
+
+    Arguments:
+    dZ -- gradient of the cost with respect to the output of the conv layer (Z), numpy array of shape (m, n_H, n_W, n_C)
+    cache -- cache of values needed for the conv_backward(), output of conv_forward()
+
+    Returns:
+    dA_prev -- gradient of the cost with respect to the input of the conv layer (A_prev),
+               numpy array of shape (m, n_H_prev, n_W_prev, n_C_prev)
+    dW -- gradient of the cost with respect to the weights of the conv layer (W)
+          numpy array of shape (f, f, n_C_prev, n_C)
+    db -- gradient of the cost with respect to the biases of the conv layer (b)
+          numpy array of shape (1, 1, 1, n_C)
+    """
+
+    ### START CODE HERE ###
+    # Retrieve information from "cache"
+    (A_prev, W, b, hparameters) = cache
+
+    # Retrieve dimensions from A_prev's shape
+    (m, n_H_prev, n_W_prev, n_C_prev) = A_prev.shape
+
+    # Retrieve dimensions from W's shape
+    (f, f, n_C_prev, n_C) = W.shape
+
+    # Retrieve information from "hparameters"
+    stride = hparameters['stride']
+    pad = hparameters['pad']
+
+    # Retrieve dimensions from dZ's shape
+    (m, n_H, n_W, n_C) = dZ.shape
+
+    # Initialize dA_prev, dW, db with the correct shapes
+    dA_prev = np.zeros((m, n_H_prev, n_W_prev, n_C_prev))
+    dW = np.zeros((f, f, n_C_prev, n_C))
+    db = np.zeros((1, 1, 1, n_C))
+
+    # Pad A_prev and dA_prev
+    A_prev_pad = zero_pad(A_prev, pad)
+    dA_prev_pad = zero_pad(dA_prev, pad)
+
+    for i in range(m):  # loop over the training examples
+
 
