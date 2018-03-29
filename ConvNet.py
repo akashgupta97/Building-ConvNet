@@ -352,3 +352,11 @@ def conv_backward(dZ, cache):
     return dA_prev, dW, db
 
 
+# In[91]:
+
+np.random.seed(1)
+dA, dW, db = conv_backward(Z, cache_conv)
+print("dA_mean =", np.mean(dA))
+print("dW_mean =", np.mean(dW))
+print("db_mean =", np.mean(db))
+
