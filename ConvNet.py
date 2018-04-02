@@ -384,4 +384,80 @@ x = np.random.randn(2, 3)
 mask = create_mask_from_window(x)
 print('x = ', x)
 print("mask = ", mask)
+def distribute_value(dz, shape):
+    """
+    Distributes the input value in the matrix of dimension shape
+
+    Arguments:
+    dz -- input scalar
+    shape -- the shape (n_H, n_W) of the output matrix for which we want to distribute the value of dz
+
+    Returns:
+    a -- Array of size (n_H, n_W) for which we distributed the value of dz
+    """
+
+    ### START CODE HERE ###
+    # Retrieve dimensions from shape (≈1 line)
+    (n_H, n_W) = shape
+
+    # Compute the value to distribute on the matrix (≈1 line)
+    average = dz / (n_H * n_W)
+
+    # Create a matrix where every entry is the "average" value (≈1 line)
+    a = np.ones((n_H, n_W)) * average
+    ### END CODE HERE ###
+
+    return a
+
+
+# In[95]:
+
+a = distribute_value(2, (2, 2))
+print('distributed value =', a)
+
+
+# **Expected Output**:
+#
+# <table>
+# <tr>
+# <td>
+# distributed_value =
+# </td>
+# <td>
+# [[ 0.5  0.5]
+# <br\>
+# [ 0.5  0.5]]
+# </td>
+# </tr>
+# </table>
+
+# ### 5.2.3 Putting it together: Pooling backward
+#
+
+def pool_backward(dA, cache, mode="max"):
+    """
+    Implements the backward pass of the pooling layer
+
+    Arguments:
+    dA -- gradient of cost with respect to the output of the pooling layer, same shape as A
+    cache -- cache output from the forward pass of the pooling layer, contains the layer's input and hparameters
+    mode -- the pooling mode you would like to use, defined as a string ("max" or "average")
+
+    Returns:
+    dA_prev -- gradient of cost with respect to the input of the pooling layer, same shape as A_prev
+    """
+
+    ### START CODE HERE ###
+
+    # Retrieve information from cache (≈1 line)
+    (A_prev, hparameters) = cache
+
+    # Retrieve hyperparameters from "hparameters" (≈2 lines)
+    stride = hparameters['stride']
+    f = hparameters['f']
+
+    # Retrieve dimensions from A_prev's shape and dA's shape (≈2 lines)
+    m, n_H_prev, n_W_prev, n_C_prev = A_prev.shape
+    m, n_H, n_W, n_C = dA.shape
+
 
