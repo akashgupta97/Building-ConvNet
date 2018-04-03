@@ -461,3 +461,46 @@ def pool_backward(dA, cache, mode="max"):
     m, n_H, n_W, n_C = dA.shape
 
 
+    # Initialize dA_prev with zeros (≈1 line)
+    dA_prev = np.zeros(A_prev.shape)
+
+    for i in range(m):  # loop over the training examples
+
+        # select training example from A_prev (≈1 line)
+        a_prev = A_prev[i]
+
+        for h in range(n_H):  # loop on the vertical axis
+            for w in range(n_W):  # loop on the horizontal axis
+                for c in range(n_C):  # loop over the channels (depth)
+
+                    # Find the corners of the current "slice" (≈4 lines)
+                    vert_start = h * stride
+                    vert_end = vert_start + f
+                    horiz_start = w * stride
+                    horiz_end = horiz_start + f
+
+                    # Compute the backward propagation in both modes.
+                    if mode == "max":
+
+                        # Use the corners and "c" to define the current slice from a_prev (≈1 line)
+                        a_prev_slice = a_prev[vert_start:vert_end, horiz_start:horiz_end, c]
+                        # Create the mask from a_prev_slice (≈1 line)
+                        mask = create_mask_from_window(a_prev_slice)
+                        # Set dA_prev to be dA_prev + (the mask multiplied by the correct entry of dA) (≈1 line)
+                        dA_prev[i, vert_start: vert_end, horiz_start: horiz_end, c] += (mask * a_prev_slice)
+
+                    elif mode == "average":
+
+                        # Get the value a from dA (≈1 line)
+                        da = dA
+                        # Define the shape of the filter as fxf (≈1 line)
+                        shape = (f, f)
+                        # Distribute it to get the correct slice of dA_prev. i.e. Add the distributed value of da. (≈1 line)
+                        dA_prev[i, vert_start: vert_end, horiz_start: horiz_end, c] += da
+
+    ### END CODE ###
+
+    # Making sure your output shape is correct
+    assert (dA_prev.shape == A_prev.shape)
+
+    return dA_prev
