@@ -504,3 +504,20 @@ def pool_backward(dA, cache, mode="max"):
     assert (dA_prev.shape == A_prev.shape)
 
     return dA_prev
+# In[105]:
+
+np.random.seed(1)
+A_prev = np.random.randn(5, 5, 3, 2)
+hparameters = {"stride": 1, "f": 2}
+A, cache = pool_forward(A_prev, hparameters)
+dA = np.random.randn(5, 4, 2, 2)
+
+dA_prev = pool_backward(dA, cache, mode="max")
+print("mode = max")
+print('mean of dA = ', np.mean(dA))
+print('dA_prev[1,1] = ', dA_prev[1, 1])
+print()
+dA_prev = pool_backward(dA, cache, mode="average")
+print("mode = average")
+print('mean of dA = ', np.mean(dA))
+print('dA_prev[1,1] = ', dA_prev[1, 1])
